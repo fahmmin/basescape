@@ -197,7 +197,7 @@ export default function FriendsPage() {
                 <AnimationBackground />
                 <Users size={64} className="text-[#F7F7F7]/30 mb-4" />
                 <p className="text-[#F7F7F7]/70 text-xl">
-                    Connect your Sui wallet to manage friends and start secure conversations
+                    Connect your Base wallet to manage friends and start secure conversations
                 </p>
             </div>
         );
@@ -229,7 +229,7 @@ export default function FriendsPage() {
                 <div className="mb-8 p-6 bg-[#0C0F1D] border-2 border-[#97F0E5]/30 rounded-lg">
                     <h2 className="font-mondwest text-xl mb-4 flex items-center gap-2">
                         <UserPlus size={24} className="text-[#97F0E5]" />
-                        Add Friend (Sui Wallet)
+                        Add Friend (Base Wallet)
                     </h2>
                     <form onSubmit={handleSendRequest} className="flex gap-4">
                         <input
