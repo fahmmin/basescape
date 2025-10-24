@@ -254,7 +254,7 @@ async function extractTokenIdFromReceipt(receipt: ethers.TransactionReceipt): Pr
             if (parsed && parsed.name === 'DropNFTMinted') {
                 return Number(parsed.args.tokenId);
             }
-        } catch (error) {
+        } catch {
             // Continue to next log
         }
     }
@@ -362,7 +362,7 @@ export async function checkBaseSepoliaConnection(provider: ethers.Provider): Pro
     try {
         const network = await provider.getNetwork();
         return Number(network.chainId) === BASE_SEPOLIA_CONFIG.chainId;
-    } catch (error) {
+    } catch {
         return false;
     }
 }

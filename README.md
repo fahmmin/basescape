@@ -1,27 +1,26 @@
-# 🌍 Culture Drops
+# 🌍 BaseScape
 
 ### _Decentralized Place-Based Social Platform with NFT Marketplace_
 
 [![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js%2015-black)](https://nextjs.org/)
-[![Powered by Walrus](https://img.shields.io/badge/Powered%20by-Walrus%20Blockchain-blue)](https://walrus.space/)
-[![Secured by Sui](https://img.shields.io/badge/Secured%20by-Sui%20Blockchain-purple)](https://sui.io/)
-[![MongoDB Atlas](https://img.shields.io/badge/Database-MongoDB%20Atlas-green)](https://mongodb.com/)
+[![Powered by Base](https://img.shields.io/badge/Powered%20by-Base%20Blockchain-blue)](https://base.org/)
+[![Secured by Ethereum](https://img.shields.io/badge/Secured%20by-Ethereum%20Blockchain-purple)](https://ethereum.org/)
 
 > **A revolutionary social platform where every place shared becomes a permanent piece of blockchain history, every vote is cryptographically secured, and every story can evolve into valuable NFTs.**
 
 ---
-Developed During Syntax Error 2025 hackathon
+Developed During Base Batch Hackathon
 
 
 
 ## 🚀 **Project Overview**
 
-Culture Drops is a **decentralized social platform** that combines the best of Web3 technology to create a new paradigm for sharing and discovering amazing places around the world. Built on **Walrus blockchain** for permanent storage and **Sui blockchain** for secure authentication, it transforms how we document and monetize cultural experiences.
+BaseScape is a **decentralized social platform** that combines the best of Web3 technology to create a new paradigm for sharing and discovering amazing places around the world. Built on **Base blockchain** for fast, low-cost transactions and **Ethereum** for secure authentication, it transforms how we document and monetize cultural experiences.
 
 ### **🎯 Core Innovation**
 
-- **Permanent Storage**: Every image and story is stored forever on Walrus blockchain
-- **Cryptographic Security**: All interactions secured by Sui wallet signatures
+- **Permanent Storage**: Every image and story is stored forever on Base blockchain
+- **Cryptographic Security**: All interactions secured by Ethereum wallet signatures
 - **NFT Evolution**: Stories can evolve into valuable NFTs based on community engagement
 - **Location Impact**: Articles can influence hype scores of nearby locations
 - **Global Community**: Decentralized, censorship-resistant place sharing
@@ -35,20 +34,20 @@ Culture Drops is a **decentralized social platform** that combines the best of W
 - **Next.js 15** with App Router for modern React development
 - **TypeScript** for type safety and developer experience
 - **Tailwind CSS** with custom design system
-- **Sui dApp Kit** for seamless wallet integration
+- **Ethers.js** for seamless wallet integration
 - **Leaflet** for interactive world mapping
 
 ### **Backend & Storage**
 
 - **MongoDB Atlas** for scalable data persistence
-- **Walrus Blockchain** for permanent content storage
-- **Sui Blockchain** for wallet authentication and signatures
+- **Base Blockchain** for permanent content storage and NFT minting
+- **Ethereum** for wallet authentication and signatures
 - **Next.js API Routes** for serverless backend logic
 
 ### **Blockchain Integration**
 
-- **Walrus**: Permanent blob storage with certificate verification
-- **Sui**: Wallet signatures, NFT minting, and smart contract interactions
+- **Base**: Fast, low-cost transactions and NFT minting
+- **Ethereum**: Wallet signatures and smart contract interactions
 - **Anonymous Voting**: Keccak256 hashing for privacy-preserving voting
 
 ---
@@ -64,14 +63,14 @@ Culture Drops is a **decentralized social platform** that combines the best of W
 
 ### **🔐 Web3 Security**
 
-- Sui wallet authentication for all actions
+- Ethereum wallet authentication for all actions
 - Cryptographic signature verification
 - Anonymous voting system (one wallet, one vote)
 - Rate limiting and spam protection
 
 ### **📝 Content Creation**
 
-- **Culture Drops**: Share places with permanent Walrus storage
+- **Culture Drops**: Share places with permanent Base storage
 - **Articles**: Create location-impacting stories with GOOD/BAD/WORSE effects
 - **Friends & Circles**: Secure wallet-to-wallet social connections
 
@@ -131,17 +130,17 @@ Culture Drops is a **decentralized social platform** that combines the best of W
 
 - Node.js 20+
 - MongoDB Atlas account
-- Sui wallet (for testing)
+- Ethereum wallet (MetaMask recommended)
 
 ### **Environment Configuration**
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/culture-drops.git
-cd culture-drops
+git clone https://github.com/your-username/basescape.git
+cd basescape
 
 # Install dependencies
-yarn install
+npm install
 
 # Configure environment variables
 cp .env.example .env.local
@@ -151,25 +150,25 @@ cp .env.example .env.local
 
 ```env
 # Database
-MONGODB_URI="mongodb+srv://username:password@cluster.mongodb.net/culture-drops"
+MONGODB_URI="mongodb+srv://username:password@cluster.mongodb.net/basescape"
 
 # Security
 SERVER_SALT="your-32-byte-random-salt"
 
-# Walrus Configuration
-NEXT_PUBLIC_PUBLISHER_BASE_URL="https://publisher.walrus-testnet.walrus.space"
-NEXT_PUBLIC_AGGREGATOR_BASE_URL="https://aggregator.walrus-testnet.walrus.space"
+# Base Configuration
+NEXT_PUBLIC_BASE_RPC_URL="https://mainnet.base.org"
+NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL="https://sepolia.base.org"
 
-# Sui Configuration
-NEXT_PUBLIC_SUI_NETWORK="testnet"
-NEXT_PUBLIC_NFT_CONTRACT="0x..." # Optional for NFT features
+# Contract Configuration
+NEXT_PUBLIC_NFT_CONTRACT="0x..." # Your deployed NFT contract address
+PRIVATE_KEY="your_private_key_here" # For deployment only
 ```
 
 ### **Development Server**
 
 ```bash
 # Start development server
-yarn dev
+npm run dev
 
 # Open http://localhost:3000
 ```
@@ -187,8 +186,8 @@ yarn dev
 
 ### **2. Creation**
 
-- Connect Sui wallet for secure authentication
-- Upload images (permanently stored on Walrus)
+- Connect Ethereum wallet for secure authentication
+- Upload images (permanently stored on Base)
 - Add location data and descriptions
 - Sign transactions for blockchain verification
 
@@ -212,7 +211,7 @@ yarn dev
 
 ### **Authentication**
 
-- Sui wallet signatures for all actions
+- Ethereum wallet signatures for all actions
 - Message verification: `"create:culturedrop"` or `"vote:<id>"`
 - No personal data collection
 - Wallet-only identification
@@ -227,7 +226,7 @@ yarn dev
 ### **Data Integrity**
 
 - Cryptographic content verification
-- Permanent Walrus storage
+- Permanent Base storage
 - Immutable blockchain records
 - Transparent metadata
 
@@ -248,8 +247,8 @@ vercel --prod
 ### **Environment Setup**
 
 1. Configure MongoDB Atlas connection
-2. Set up Walrus endpoints
-3. Configure Sui network settings
+2. Set up Base RPC endpoints
+3. Configure Ethereum network settings
 4. Deploy with environment variables
 
 ---
@@ -257,7 +256,7 @@ vercel --prod
 ## 📊 **Performance Metrics**
 
 - **Load Time**: < 2s initial page load
-- **Storage**: Permanent on Walrus blockchain
+- **Storage**: Permanent on Base blockchain
 - **Scalability**: MongoDB Atlas auto-scaling
 - **Security**: Cryptographic verification for all actions
 - **Uptime**: 99.9% with Vercel deployment
@@ -275,7 +274,7 @@ vercel --prod
 
 ### **Innovation Highlights**
 
-- **First-of-its-kind** Walrus + Sui integration
+- **First-of-its-kind** Base + Ethereum integration
 - **Novel NFT evolution** system based on community engagement
 - **Location impact** system for articles
 - **Anonymous voting** with cryptographic privacy
@@ -323,12 +322,12 @@ vercel --prod
 
 ## 👥 **Team & Credits**
 
-Built with ❤️ by the Culture Drops team for the **Walrus x Sui Hackathon**.
+Built with ❤️ by the BaseScape team for the **Base Batch Hackathon**.
 
 ### **Technologies Used**
 
-- **Walrus Blockchain** for permanent storage
-- **Sui Blockchain** for authentication and NFTs
+- **Base Blockchain** for permanent storage and NFTs
+- **Ethereum** for authentication and wallet integration
 - **Next.js** for the web application
 - **MongoDB** for data persistence
 - **Tailwind CSS** for styling
@@ -366,17 +365,17 @@ git push origin feature/amazing-feature
 
 ## 📞 **Contact & Support**
 
-- **Website**: [culture-drops.vercel.app](https://culture-drops.vercel.app)
-- **GitHub**: [github.com/your-username/culture-drops](https://github.com/your-username/culture-drops)
-- **Discord**: [Join our community](https://discord.gg/culture-drops)
-- **Twitter**: [@CultureDrops](https://twitter.com/culturedrops)
+- **Website**: [basescape.vercel.app](https://basescape.vercel.app)
+- **GitHub**: [github.com/your-username/basescape](https://github.com/your-username/basescape)
+- **Discord**: [Join our community](https://discord.gg/basescape)
+- **Twitter**: [@BaseScape](https://twitter.com/basescape)
 
 ---
 
 ## 🙏 **Acknowledgments**
 
-- **Walrus Team** for the revolutionary storage solution
-- **Sui Team** for the fast and secure blockchain
+- **Base Team** for the fast and low-cost blockchain
+- **Ethereum Team** for the secure and decentralized foundation
 - **Next.js Team** for the amazing framework
 - **MongoDB** for the scalable database
 - **Open Source Community** for the incredible tools
@@ -385,10 +384,10 @@ git push origin feature/amazing-feature
 
 <div align="center">
 
-**🌟 Built for the Walrus x Sui Hackathon 🌟**
+**🌟 Built for the Base Batch Hackathon 🌟**
 
 _Transforming how we share, discover, and monetize cultural experiences through blockchain technology._
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/culture-drops)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/basescape)
 
 </div>

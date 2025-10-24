@@ -6,7 +6,12 @@ import { ethers } from 'ethers';
 // Extend Window interface to include ethereum
 declare global {
     interface Window {
-        ethereum?: any;
+        ethereum?: {
+            request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+            on: (event: string, handler: (...args: unknown[]) => void) => void;
+            removeListener: (event: string, handler: (...args: unknown[]) => void) => void;
+            listAccounts: () => Promise<string[]>;
+        };
     }
 }
 
@@ -42,8 +47,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
         // Listen for account changes
         if (window.ethereum) {
-            const handleAccountsChanged = (accounts: string[]) => {
-                if (accounts.length > 0) {
+            const handleAccountsChanged = (...args: unknown[]) => {
+                const accounts = args[0] as string[];
+                if (accounts && accounts.length > 0) {
                     setAccount(accounts[0]);
                 } else {
                     setAccount(null);
@@ -53,7 +59,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
             window.ethereum.on('accountsChanged', handleAccountsChanged);
 
             return () => {
-                window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+                window.ethereum?.removeListener('accountsChanged', handleAccountsChanged);
             };
         }
     }, []);
@@ -113,7 +119,7 @@ export function useSignPersonalMessage() {
 
     return {
         mutateAsync: async ({ message }: { message: Uint8Array }) => {
-            if (!account) {
+            if (!account || !window.ethereum) {
                 throw new Error('Wallet not connected');
             }
 

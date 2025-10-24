@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BaseWalletConnect } from './BaseWalletConnect';
-import { Home, PlusCircle, Map, Trophy, Globe, Menu, X, Users, MessageCircle, User, Gamepad2 } from 'lucide-react';
+import { Home, PlusCircle, Map, Trophy, Globe, Menu, X, Users, MessageCircle, User } from 'lucide-react';
 import { useState } from 'react';
 import { clsx } from 'clsx';
 

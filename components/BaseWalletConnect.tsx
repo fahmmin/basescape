@@ -8,7 +8,7 @@ interface BaseWalletConnectProps {
 }
 
 export function BaseWalletConnect({ onAccountChange }: BaseWalletConnectProps) {
-    const { account, isConnected, connect, disconnect } = useWallet();
+    const { account, connect, disconnect } = useWallet();
 
     const connectWallet = async () => {
         try {

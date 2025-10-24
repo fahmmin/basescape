@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCurrentAccount } from '@/lib/walletContext';
 import { AnimationBackground } from '@/components/AnimationBackground';
@@ -49,37 +49,7 @@ function ChatPageContent() {
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
     const [isSending, setIsSending] = useState(false);
 
-    useEffect(() => {
-        const loadData = async () => {
-            if (account) {
-                await fetchConversations();
-            } else {
-                setIsLoadingConversations(false);
-            }
-        };
-
-        loadData();
-    }, [account]);
-
-    useEffect(() => {
-        const conversationId = searchParams.get('conversation');
-        if (conversationId && conversations.length > 0) {
-            const conv = conversations.find((c) => c._id === conversationId);
-            if (conv) {
-                setSelectedConversation(conv);
-                const loadMessages = async () => {
-                    await fetchMessages(conversationId);
-                };
-                loadMessages();
-            }
-        }
-    }, [searchParams, conversations]);
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-    const fetchConversations = async () => {
+    const fetchConversations = useCallback(async () => {
         if (!account) return;
 
         try {
@@ -93,9 +63,9 @@ function ChatPageContent() {
         } finally {
             setIsLoadingConversations(false);
         }
-    };
+    }, [account]);
 
-    const fetchMessages = async (conversationId: string) => {
+    const fetchMessages = useCallback(async (conversationId: string) => {
         setIsLoadingMessages(true);
         try {
             const response = await fetch(
@@ -122,7 +92,37 @@ function ChatPageContent() {
         } finally {
             setIsLoadingMessages(false);
         }
-    };
+    }, [account]);
+
+    useEffect(() => {
+        const loadData = async () => {
+            if (account) {
+                await fetchConversations();
+            } else {
+                setIsLoadingConversations(false);
+            }
+        };
+
+        loadData();
+    }, [account, fetchConversations]);
+
+    useEffect(() => {
+        const conversationId = searchParams.get('conversation');
+        if (conversationId && conversations.length > 0) {
+            const conv = conversations.find((c) => c._id === conversationId);
+            if (conv) {
+                setSelectedConversation(conv);
+                const loadMessages = async () => {
+                    await fetchMessages(conversationId);
+                };
+                loadMessages();
+            }
+        }
+    }, [searchParams, conversations, fetchMessages]);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();

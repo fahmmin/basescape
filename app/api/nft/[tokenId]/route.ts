@@ -3,10 +3,11 @@ import { getNFTData } from '@/lib/baseContract';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { tokenId: string } }
+    { params }: { params: Promise<{ tokenId: string }> }
 ) {
     try {
-        const tokenId = parseInt(params.tokenId);
+        const { tokenId: tokenIdStr } = await params;
+        const tokenId = parseInt(tokenIdStr);
 
         if (isNaN(tokenId)) {
             return NextResponse.json(

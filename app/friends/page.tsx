@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCurrentAccount, useSignPersonalMessage } from '@/lib/walletContext';
 import { AnimationBackground } from '@/components/AnimationBackground';
@@ -41,19 +41,7 @@ export default function FriendsPage() {
     const [newFriendWallet, setNewFriendWallet] = useState('');
     const [isSending, setIsSending] = useState(false);
 
-    useEffect(() => {
-        const loadData = async () => {
-            if (account) {
-                await fetchFriends();
-            } else {
-                setIsLoading(false);
-            }
-        };
-
-        loadData();
-    }, [account]);
-
-    const fetchFriends = async () => {
+    const fetchFriends = useCallback(async () => {
         if (!account) return;
 
         try {
@@ -69,7 +57,19 @@ export default function FriendsPage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [account]);
+
+    useEffect(() => {
+        const loadData = async () => {
+            if (account) {
+                await fetchFriends();
+            } else {
+                setIsLoading(false);
+            }
+        };
+
+        loadData();
+    }, [account, fetchFriends]);
 
     const handleSendRequest = async (e: React.FormEvent) => {
         e.preventDefault();

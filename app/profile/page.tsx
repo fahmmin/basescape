@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useCurrentAccount } from '@/lib/walletContext';
 import { AnimationBackground } from '@/components/AnimationBackground';
 import { DropCard } from '@/components/DropCard';
@@ -57,19 +57,7 @@ export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState<'drops' | 'articles' | 'activity'>('drops');
     const [friendActivity, setFriendActivity] = useState<Array<(Drop | Article) & { type: string }>>([]);
 
-    useEffect(() => {
-        const loadData = async () => {
-            if (account) {
-                await Promise.all([fetchProfile(), fetchFriendActivity()]);
-            } else {
-                setIsLoading(false);
-            }
-        };
-
-        loadData();
-    }, [account]);
-
-    const fetchProfile = async () => {
+    const fetchProfile = useCallback(async () => {
         if (!account) return;
 
         setIsLoading(true);
@@ -84,9 +72,9 @@ export default function ProfilePage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [account]);
 
-    const fetchFriendActivity = async () => {
+    const fetchFriendActivity = useCallback(async () => {
         if (!account) return;
 
         try {
@@ -98,7 +86,19 @@ export default function ProfilePage() {
         } catch (error) {
             console.error('Failed to fetch friend activity:', error);
         }
-    };
+    }, [account]);
+
+    useEffect(() => {
+        const loadData = async () => {
+            if (account) {
+                await Promise.all([fetchProfile(), fetchFriendActivity()]);
+            } else {
+                setIsLoading(false);
+            }
+        };
+
+        loadData();
+    }, [account, fetchProfile, fetchFriendActivity]);
 
     if (!account) {
         return (

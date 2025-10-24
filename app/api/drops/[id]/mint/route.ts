@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongoose';
 import CultureDrop from '@/models/CultureDrop';
-import { normalizeSuiAddress } from '@/lib/auth';
 
 // POST /api/drops/[id]/mint - Save NFT minting data
 export async function POST(

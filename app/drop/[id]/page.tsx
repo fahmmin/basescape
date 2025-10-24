@@ -17,8 +17,7 @@ import {
     buyNFT,
     calculateCurrentPrice,
     weiToETH,
-    BASESCAPE_CONTRACT_ADDRESS,
-    getBaseSepoliaProvider
+    BASESCAPE_CONTRACT_ADDRESS
 } from '@/lib/baseContract';
 
 interface Drop {
@@ -159,6 +158,9 @@ export default function DropDetailPage() {
             }
 
             // Get signer
+            if (!window.ethereum) {
+                throw new Error('MetaMask not installed');
+            }
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
 
@@ -375,6 +377,9 @@ export default function DropDetailPage() {
 
                                     try {
                                         const priceInETH = weiToETH(BigInt(nftOnChainData.currentPrice));
+                                        if (!window.ethereum) {
+                                            throw new Error('MetaMask not installed');
+                                        }
                                         const provider = new ethers.BrowserProvider(window.ethereum);
                                         const signer = await provider.getSigner();
 

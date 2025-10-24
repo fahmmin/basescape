@@ -224,6 +224,7 @@ export default function CreateArticlePage() {
                                 />
                                 {thumbnailFile ? (
                                     <div className="flex flex-col items-center gap-2 pointer-events-none">
+                                        {/* eslint-disable-next-line jsx-a11y/alt-text */}
                                         <Image size={40} className="text-[#97F0E5]" />
                                         <p className="text-[#F7F7F7] text-center text-sm">
                                             {thumbnailFile.name}

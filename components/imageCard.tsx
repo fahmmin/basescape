@@ -31,7 +31,7 @@ export const ImageCard = (props: ImageCardProps) => {
 
   useEffect(() => {
     console.log(`[ImageCard ${props.blobId}] Initial state:`, { isLoading, hasError });
-  }, []);
+  }, [isLoading, hasError, props.blobId]);
 
   return (
     <div className="w-full max-w-[480px] h-auto bg-[#0C0F1D] rounded-2xl border border-2 border-[#97F0E533] flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-2 p-4 sm:p-2">
@@ -41,9 +41,9 @@ export const ImageCard = (props: ImageCardProps) => {
             <ImageIcon className="w-12 h-12 text-[#97F0E5]" strokeWidth={1} />
           </div>
         ) : (
-          <Image 
-            src={props.imageUrl} 
-            alt={`uploaded image: ${props.blobId}`} 
+          <Image
+            src={props.imageUrl}
+            alt={`uploaded image: ${props.blobId}`}
             fill
             className="object-cover"
             sizes="(max-width: 640px) 100vw, 142px"
@@ -100,7 +100,7 @@ export const ImageCard = (props: ImageCardProps) => {
             }
           </span>
           <div className="w-full sm:w-[157px] overflow-hidden flex items-center">
-            { 
+            {
               props.status === 'newly created' ? (
                 <Link href={`https://testnet.suivision.xyz/object/${props.suiObjectId}`} target="_blank" rel="noopener noreferrer" className="text-[#C684F6] underline text-xs sm:text-sm font-medium block text-left text-ellipsis whitespace-nowrap overflow-hidden">
                   {props.suiObjectId}

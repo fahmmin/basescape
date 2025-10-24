@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCurrentAccount, useSignPersonalMessage } from '@/lib/walletContext';
 import { AnimationBackground } from '@/components/AnimationBackground';
@@ -31,19 +31,7 @@ export default function CirclesPage() {
     const [isPrivate, setIsPrivate] = useState(true);
     const [isCreating, setIsCreating] = useState(false);
 
-    useEffect(() => {
-        const loadData = async () => {
-            if (account) {
-                await fetchCircles();
-            } else {
-                setIsLoading(false);
-            }
-        };
-
-        loadData();
-    }, [account]);
-
-    const fetchCircles = async () => {
+    const fetchCircles = useCallback(async () => {
         if (!account) return;
 
         try {
@@ -57,7 +45,19 @@ export default function CirclesPage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [account]);
+
+    useEffect(() => {
+        const loadData = async () => {
+            if (account) {
+                await fetchCircles();
+            } else {
+                setIsLoading(false);
+            }
+        };
+
+        loadData();
+    }, [account, fetchCircles]);
 
     const handleCreateCircle = async (e: React.FormEvent) => {
         e.preventDefault();
