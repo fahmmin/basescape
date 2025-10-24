@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSignPersonalMessage } from '@/lib/walletContext';
 import { AnimationBackground } from '@/components/AnimationBackground';
 import {
     Users,

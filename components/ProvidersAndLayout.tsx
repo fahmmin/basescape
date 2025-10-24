@@ -1,4 +1,4 @@
-import { SuiProvider } from "@/components/SuiProvider";
+import { BaseProvider } from "@/components/BaseProvider";
 import { Navigation } from "@/components/Navigation";
 
 export type ProvidersAndLayoutProps = {
@@ -10,7 +10,7 @@ export function ProvidersAndLayout(props: ProvidersAndLayoutProps) {
   const { children } = props;
 
   return (
-    <SuiProvider>
+    <BaseProvider>
       <div
         className={`max-w-screen w-full min-h-screen p-4 font-montreal bg-[#0C0F1D] bg-gradient-to-b from-[#0C0F1D80] to-[#97F0E580] from-[77.3%] flex flex-col text-[#F7F7F7] gap-4`}
       >
@@ -35,6 +35,6 @@ export function ProvidersAndLayout(props: ProvidersAndLayoutProps) {
           </div>
         </div>
       </div>
-    </SuiProvider>
+    </BaseProvider>
   )
 }

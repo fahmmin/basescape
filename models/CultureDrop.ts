@@ -51,14 +51,13 @@ const CultureDropSchema = new Schema({
         endEpoch: { type: Number },
     },
 
-    // NFT metadata (v4 - optional)
+    // NFT metadata (v5 - Base blockchain)
     nft: {
-        objectId: { type: String },      // Sui NFT object ID
-        packageId: { type: String },     // Contract package ID
-        marketplaceId: { type: String }, // Marketplace object ID
+        tokenId: { type: Number },       // Base NFT token ID
+        contractAddress: { type: String }, // Contract address
         mintedAt: { type: Date },        // When NFT was minted
         mintedBy: { type: String },      // Wallet that minted
-        txDigest: { type: String },      // Transaction hash
+        txHash: { type: String },        // Transaction hash
         isMinted: { type: Boolean, default: false },
     },
 
@@ -105,12 +104,11 @@ export interface ICultureDrop extends Document {
         endEpoch?: number;
     };
     nft?: {
-        objectId?: string;
-        packageId?: string;
-        marketplaceId?: string;
+        tokenId?: number;
+        contractAddress?: string;
         mintedAt?: Date;
         mintedBy?: string;
-        txDigest?: string;
+        txHash?: string;
         isMinted?: boolean;
     };
     createdAt: Date;

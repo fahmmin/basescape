@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount } from '@/lib/walletContext';
 import { AnimationBackground } from '@/components/AnimationBackground';
 import {
     MessageCircle,

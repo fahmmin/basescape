@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { AnimationBackground } from '@/components/AnimationBackground';
-import { useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSignPersonalMessage } from '@/lib/walletContext';
 import {
     FileText,
     Calendar,
@@ -248,10 +248,10 @@ export default function ArticleViewPage() {
                             onClick={handleVerify}
                             disabled={isVerifying || hasVerified || !account}
                             className={`flex items-center gap-2 px-6 py-2 rounded-md font-neuebit transition-all ${hasVerified
-                                    ? 'bg-[#97F0E5]/20 text-[#97F0E5] border-2 border-[#97F0E5] cursor-not-allowed'
-                                    : account
-                                        ? 'bg-[#97F0E5] hover:bg-[#97F0E5]/80 text-[#0C0F1D]'
-                                        : 'bg-[#97F0E5]/20 text-[#F7F7F7]/50 cursor-not-allowed'
+                                ? 'bg-[#97F0E5]/20 text-[#97F0E5] border-2 border-[#97F0E5] cursor-not-allowed'
+                                : account
+                                    ? 'bg-[#97F0E5] hover:bg-[#97F0E5]/80 text-[#0C0F1D]'
+                                    : 'bg-[#97F0E5]/20 text-[#F7F7F7]/50 cursor-not-allowed'
                                 }`}
                         >
                             <CheckCircle2 size={18} />

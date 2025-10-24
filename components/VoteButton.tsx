@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
 import { Heart } from 'lucide-react';
 import { toast } from 'sonner';
 import { messageFor } from '@/lib/crypto';
+import { useCurrentAccount, useSignPersonalMessage } from '@/lib/walletContext';
 
 interface VoteButtonProps {
     dropId: string;
@@ -74,10 +74,10 @@ export function VoteButton({ dropId, initialVoteCount, onVoteSuccess }: VoteButt
             onClick={handleVote}
             disabled={isVoting || hasVoted || !account}
             className={`flex items-center gap-2 px-6 py-3 rounded-md font-neuebit transition-all ${hasVoted
-                    ? 'bg-[#C684F6]/20 text-[#C684F6] border-2 border-[#C684F6] cursor-not-allowed'
-                    : account
-                        ? 'bg-[#C684F6] hover:bg-[#C684F6]/80 text-[#0C0F1D] border-2 border-[#C684F6]'
-                        : 'bg-[#97F0E5]/20 text-[#F7F7F7]/50 border-2 border-[#97F0E5]/30 cursor-not-allowed'
+                ? 'bg-[#C684F6]/20 text-[#C684F6] border-2 border-[#C684F6] cursor-not-allowed'
+                : account
+                    ? 'bg-[#C684F6] hover:bg-[#C684F6]/80 text-[#0C0F1D] border-2 border-[#C684F6]'
+                    : 'bg-[#97F0E5]/20 text-[#F7F7F7]/50 border-2 border-[#97F0E5]/30 cursor-not-allowed'
                 }`}
         >
             <Heart size={20} fill={hasVoted ? '#C684F6' : 'none'} />

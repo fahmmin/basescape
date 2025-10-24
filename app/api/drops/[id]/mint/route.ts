@@ -13,16 +13,16 @@ export async function POST(
         const { id } = await params;
 
         const body = await request.json();
-        const { nftObjectId, packageId, marketplaceId, txDigest, wallet } = body;
+        const { tokenId, contractAddress, txHash, wallet } = body;
 
-        if (!nftObjectId || !packageId || !marketplaceId || !txDigest || !wallet) {
+        if (!tokenId || !contractAddress || !txHash || !wallet) {
             return NextResponse.json(
                 { ok: false, error: 'Missing required NFT data' },
                 { status: 400 }
             );
         }
 
-        const normalizedWallet = normalizeSuiAddress(wallet);
+        const normalizedWallet = wallet.toLowerCase();
 
         // Find the drop
         const drop = await CultureDrop.findById(id);
@@ -44,12 +44,11 @@ export async function POST(
 
         // Update drop with NFT data
         drop.nft = {
-            objectId: nftObjectId,
-            packageId,
-            marketplaceId,
+            tokenId,
+            contractAddress,
             mintedAt: new Date(),
             mintedBy: normalizedWallet,
-            txDigest,
+            txHash,
             isMinted: true,
         };
 

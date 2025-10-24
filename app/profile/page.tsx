@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount } from '@/lib/walletContext';
 import { AnimationBackground } from '@/components/AnimationBackground';
 import { DropCard } from '@/components/DropCard';
 import { ArticleCard } from '@/components/ArticleCard';

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { WalletConnect } from './WalletConnect';
+import { BaseWalletConnect } from './BaseWalletConnect';
 import { Home, PlusCircle, Map, Trophy, Globe, Menu, X, Users, MessageCircle, User, Gamepad2 } from 'lucide-react';
 import { useState } from 'react';
 import { clsx } from 'clsx';
@@ -46,7 +46,7 @@ export function Navigation() {
                         </Link>
                     ))}
                 </div>
-                <WalletConnect />
+                <BaseWalletConnect />
             </div>
 
             {/* Mobile Navigation */}
@@ -61,7 +61,7 @@ export function Navigation() {
                         <Menu size={24} className="text-[#F7F7F7]" />
                     )}
                 </button>
-                <WalletConnect />
+                <BaseWalletConnect />
             </div>
 
             {/* Mobile Menu Dropdown */}

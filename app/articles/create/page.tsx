@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSignPersonalMessage } from '@/lib/walletContext';
 import { AnimationBackground } from '@/components/AnimationBackground';
 import { ImageUp, Image, FileText, MapPin } from 'lucide-react';
 import { toast } from 'sonner';

@@ -8,18 +8,18 @@ import { VoteButton } from '@/components/VoteButton';
 import { CommentSection } from '@/components/CommentSection';
 import { WalrusBadge } from '@/components/WalrusBadge';
 import { NFTBadge } from '@/components/NFTBadge';
-import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { MapPin, Calendar, Loader2, Flame, Sparkles, DollarSign } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { toast } from 'sonner';
+import { ethers } from 'ethers';
 import {
-    buildMintDropNFTTransaction,
-    buildBuyNFTTransaction,
-    extractNFTObjectId,
+    mintDropNFT,
+    buyNFT,
     calculateCurrentPrice,
-    mistToSUI,
-    CULTURE_DROPS_PACKAGE_ID
-} from '@/lib/suiContract';
+    weiToETH,
+    CULTURE_DROPS_CONTRACT_ADDRESS,
+    getBaseSepoliaProvider
+} from '@/lib/baseContract';
 
 interface Drop {
     _id: string;
@@ -40,11 +40,11 @@ interface Drop {
     createdAt: string;
     creatorWallet: string;
     nft?: {
-        objectId: string;
-        packageId: string;
+        tokenId: number;
+        contractAddress: string;
         mintedAt: string;
         mintedBy: string;
-        txDigest: string;
+        txHash: string;
         isMinted: boolean;
     };
 }
@@ -59,8 +59,7 @@ interface Comment {
 export default function DropDetailPage() {
     const params = useParams();
     const dropId = params.id as string;
-    const account = useCurrentAccount();
-    const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+    const [account, setAccount] = useState<string | null>(null);
 
     const [drop, setDrop] = useState<Drop | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
@@ -77,6 +76,24 @@ export default function DropDetailPage() {
     } | null>(null);
     const [isBuying, setIsBuying] = useState(false);
 
+    // Connect wallet
+    const connectWallet = async () => {
+        if (typeof window !== 'undefined' && window.ethereum) {
+            try {
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                const accounts = await provider.send('eth_requestAccounts', []);
+                if (accounts.length > 0) {
+                    setAccount(accounts[0]);
+                }
+            } catch (error) {
+                console.error('Failed to connect wallet:', error);
+                toast.error('Failed to connect wallet');
+            }
+        } else {
+            toast.error('Please install MetaMask');
+        }
+    };
+
     useEffect(() => {
         const fetchDrop = async () => {
             try {
@@ -87,8 +104,8 @@ export default function DropDetailPage() {
                     setComments(data.data.comments);
 
                     // Fetch NFT on-chain data if minted
-                    if (data.data.drop.nft?.isMinted && data.data.drop.nft?.objectId) {
-                        fetchNFTData(data.data.drop.nft.objectId);
+                    if (data.data.drop.nft?.isMinted && data.data.drop.nft?.tokenId) {
+                        fetchNFTData(data.data.drop.nft.tokenId);
                     }
                 }
             } catch (error) {
@@ -101,12 +118,16 @@ export default function DropDetailPage() {
         fetchDrop();
     }, [dropId]);
 
-    const fetchNFTData = async (objectId: string) => {
+    const fetchNFTData = async (tokenId: number) => {
         try {
-            const response = await fetch(`/api/nft/${objectId}`);
+            const response = await fetch(`/api/nft/${tokenId}`);
             const data = await response.json();
             if (data.ok) {
-                setNftOnChainData(data.data.fields);
+                setNftOnChainData({
+                    forSale: data.data.forSale,
+                    currentPrice: Number(data.data.currentPrice),
+                    basePrice: Number(data.data.basePrice),
+                });
             }
         } catch (error) {
             console.error('Failed to fetch NFT on-chain data:', error);
@@ -131,14 +152,20 @@ export default function DropDetailPage() {
 
         try {
             // Verify user is the creator
-            if (account.address.toLowerCase() !== drop.creatorWallet.toLowerCase()) {
+            if (account.toLowerCase() !== drop.creatorWallet.toLowerCase()) {
                 toast.error('Only the drop creator can mint this as an NFT');
                 setIsMinting(false);
                 return;
             }
 
-            // Build transaction with full drop data
-            const tx = buildMintDropNFTTransaction({
+            // Get signer
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+
+            toast.loading('Sign transaction in your wallet...', { id: toastId });
+
+            // Mint NFT using Base contract
+            const { tx, tokenId } = await mintDropNFT(signer, {
                 title: drop.title,
                 caption: drop.caption,
                 city: drop.city,
@@ -155,60 +182,19 @@ export default function DropDetailPage() {
                 creatorWallet: drop.creatorWallet, // Pass creator wallet
             });
 
-            toast.loading('Sign transaction in your wallet...', { id: toastId });
+            console.log('✅ Transaction successful:', tx);
 
-            // Sign and execute with options to get full details
-            const result = await signAndExecuteTransaction({
-                transaction: tx,
-            });
-
-            console.log('✅ Transaction successful:', result);
-
-            toast.loading('NFT minted! Extracting object ID...', { id: toastId });
-
-            // Extract NFT object ID (with robust fallbacks)
-            const nftObjectId = extractNFTObjectId(result);
-
-            if (!nftObjectId) {
-                // Still save the transaction but without object ID
-                console.error('⚠️ Could not auto-extract NFT object ID');
-                toast.warning(
-                    `NFT minted but couldn't auto-detect ID. Check transaction: ${result.digest}`,
-                    { id: toastId, duration: 10000 }
-                );
-
-                // Save with transaction digest only
-                await fetch(`/api/drops/${dropId}/mint`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        nftObjectId: `MANUAL_CHECK_${result.digest}`, // Placeholder
-                        packageId: CULTURE_DROPS_PACKAGE_ID,
-                        marketplaceId: '', // Not needed for custom contract
-                        txDigest: result.digest,
-                        wallet: account.address,
-                    }),
-                });
-
-                toast.info('Please find your NFT in your wallet or check Suiscan', {
-                    id: toastId,
-                    duration: 10000
-                });
-                return;
-            }
-
-            toast.loading('NFT object ID found! Saving...', { id: toastId });
+            toast.loading('NFT minted! Saving to database...', { id: toastId });
 
             // Save to MongoDB
             const saveResponse = await fetch(`/api/drops/${dropId}/mint`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    nftObjectId,
-                    packageId: CULTURE_DROPS_PACKAGE_ID,
-                    marketplaceId: '', // Not needed
-                    txDigest: result.digest,
-                    wallet: account.address,
+                    tokenId,
+                    contractAddress: CULTURE_DROPS_CONTRACT_ADDRESS,
+                    txHash: tx.hash,
+                    wallet: account,
                 }),
             });
 
@@ -244,11 +230,10 @@ export default function DropDetailPage() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    nftObjectId: manualNftId.trim(),
-                    packageId: CULTURE_DROPS_PACKAGE_ID,
-                    marketplaceId: '',
-                    txDigest: 'MANUAL_ENTRY',
-                    wallet: account.address,
+                    tokenId: parseInt(manualNftId.trim()),
+                    contractAddress: CULTURE_DROPS_CONTRACT_ADDRESS,
+                    txHash: 'MANUAL_ENTRY',
+                    wallet: account,
                 }),
             });
 
@@ -359,8 +344,29 @@ export default function DropDetailPage() {
                             }}
                         />
 
+                        {/* Wallet Connection */}
+                        {!account && (
+                            <button
+                                onClick={connectWallet}
+                                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-md font-neuebit bg-gradient-to-r from-[#97F0E5] to-[#C684F6] hover:opacity-80 text-[#0C0F1D] transition-all"
+                            >
+                                <span>CONNECT WALLET</span>
+                            </button>
+                        )}
+
+                        {account && (
+                            <div className="p-3 bg-[#0C0F1D] border-2 border-[#97F0E5]/30 rounded-md">
+                                <p className="text-sm font-neuebit text-[#F7F7F7]/70 mb-1">
+                                    CONNECTED WALLET
+                                </p>
+                                <p className="font-mono text-sm text-[#97F0E5]">
+                                    {account.slice(0, 8)}...{account.slice(-6)}
+                                </p>
+                            </div>
+                        )}
+
                         {/* Buy NFT Button - Show to non-owners when for sale */}
-                        {drop.nft?.isMinted && nftOnChainData?.forSale && account && account.address.toLowerCase() !== drop.creatorWallet.toLowerCase() && (
+                        {drop.nft?.isMinted && nftOnChainData?.forSale && account && account.toLowerCase() !== drop.creatorWallet.toLowerCase() && (
                             <button
                                 onClick={async () => {
                                     if (!account) return;
@@ -368,19 +374,18 @@ export default function DropDetailPage() {
                                     const toastId = toast.loading('Preparing purchase...');
 
                                     try {
-                                        const priceInSUI = mistToSUI(nftOnChainData.currentPrice);
-                                        const tx = buildBuyNFTTransaction(drop.nft!.objectId, priceInSUI);
+                                        const priceInETH = weiToETH(BigInt(nftOnChainData.currentPrice));
+                                        const provider = new ethers.BrowserProvider(window.ethereum);
+                                        const signer = await provider.getSigner();
 
                                         toast.loading('Sign purchase transaction...', { id: toastId });
 
-                                        await signAndExecuteTransaction({
-                                            transaction: tx,
-                                        });
+                                        await buyNFT(signer, drop.nft!.tokenId, priceInETH);
 
-                                        toast.success(`NFT purchased for ${priceInSUI.toFixed(2)} SUI! 🎉`, { id: toastId });
+                                        toast.success(`NFT purchased for ${priceInETH.toFixed(4)} ETH! 🎉`, { id: toastId });
 
                                         // Refresh NFT data
-                                        fetchNFTData(drop.nft!.objectId);
+                                        fetchNFTData(drop.nft!.tokenId);
                                     } catch (error) {
                                         console.error('Purchase error:', error);
                                         toast.error('Failed to purchase NFT', { id: toastId });
@@ -398,13 +403,13 @@ export default function DropDetailPage() {
                                 <span>
                                     {isBuying
                                         ? 'PURCHASING...'
-                                        : `BUY NOW FOR ${mistToSUI(nftOnChainData.currentPrice).toFixed(2)} SUI`}
+                                        : `BUY NOW FOR ${weiToETH(BigInt(nftOnChainData.currentPrice)).toFixed(4)} ETH`}
                                 </span>
                             </button>
                         )}
 
                         {/* Mint as NFT Button - Show only to creator */}
-                        {!drop.nft?.isMinted && account && account.address.toLowerCase() === drop.creatorWallet.toLowerCase() && (
+                        {!drop.nft?.isMinted && account && account.toLowerCase() === drop.creatorWallet.toLowerCase() && (
                             <div className="space-y-3">
                                 {/* Price Setting */}
                                 <div className="p-4 bg-[#0C0F1D] border-2 border-[#C684F6]/30 rounded-md space-y-2">
@@ -423,7 +428,7 @@ export default function DropDetailPage() {
                                     {showPriceInput && (
                                         <div className="pl-6 space-y-2">
                                             <label className="block text-sm text-[#F7F7F7]/70">
-                                                Base Price (in SUI)
+                                                Base Price (in ETH)
                                             </label>
                                             <input
                                                 type="number"
@@ -437,7 +442,7 @@ export default function DropDetailPage() {
                                             <p className="text-xs text-[#F7F7F7]/50">
                                                 💡 Current hype: {drop.hypeScore.toFixed(1)} → Price will be{' '}
                                                 <span className="text-[#C684F6] font-neuebit">
-                                                    {calculateCurrentPrice(parseFloat(basePrice) || 0, drop.hypeScore).toFixed(2)} SUI
+                                                    {calculateCurrentPrice(parseFloat(basePrice) || 0, drop.hypeScore).toFixed(4)} ETH
                                                 </span>
                                                 {' '}({((calculateCurrentPrice(1, drop.hypeScore) - 1) * 100).toFixed(0)}% hype bonus!)
                                             </p>
@@ -458,7 +463,7 @@ export default function DropDetailPage() {
                                         {isMinting
                                             ? 'MINTING NFT...'
                                             : account
-                                                ? 'MINT AS NFT ON SUI'
+                                                ? 'MINT AS NFT ON BASE'
                                                 : 'CONNECT WALLET TO MINT NFT'}
                                     </span>
                                 </button>
@@ -474,13 +479,13 @@ export default function DropDetailPage() {
                                 {showManualInput && (
                                     <div className="p-4 bg-[#0C0F1D] border-2 border-[#97F0E5]/30 rounded-md space-y-2">
                                         <label className="block text-sm font-neuebit text-[#F7F7F7]/70">
-                                            NFT Object ID (from Suiscan or wallet)
+                                            NFT Token ID (from BaseScan or wallet)
                                         </label>
                                         <input
                                             type="text"
                                             value={manualNftId}
                                             onChange={(e) => setManualNftId(e.target.value)}
-                                            placeholder="0x..."
+                                            placeholder="123"
                                             className="w-full p-2 bg-[#090e1d] border-2 border-[#97F0E5]/30 rounded-md text-[#F7F7F7] font-mono text-sm focus:outline-none focus:border-[#97F0E5]"
                                         />
                                         <button
