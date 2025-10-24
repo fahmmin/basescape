@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "PPMondwest";
+  src: url("/fonts/Mondwest-Full/PPMondwest-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PPMondwest";
+  src: url("/fonts/Mondwest-Full/PPMondwest-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PPNeueMontreal";
+  src: url("/fonts/Montreal/OTF/PPNeueMontreal-Book.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PPNeueMontreal";
+  src: url("/fonts/Montreal/OTF/PPNeueMontreal-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PPNeueMontreal";
+  src: url("/fonts/Montreal/OTF/PPNeueMontreal-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PPNeueBit";
+  src: url("/fonts/Neuebit-Full/PPNeueBit-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PPNeueBit";
+  src: url("/fonts/Neuebit-Full/PPNeueBit-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  --font-mondwest: "PPMondwest", sans-serif;
+  --font-montreal: "PPNeueMontreal", sans-serif;
+  --font-neuebit: "PPNeueBit", monospace;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0C0F1D;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #97F0E5;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #C684F6;
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  font-family: "PPNeueMontreal", sans-serif;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #0C0F1D;
+  color: #F7F7F7;
+  border: 2px solid #97F0E5;
+  border-radius: 8px;
+}
+
+.leaflet-popup-tip {
+  background: #0C0F1D;
+}
