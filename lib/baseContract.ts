@@ -6,7 +6,7 @@
 import { ethers } from 'ethers';
 
 // Base Sepolia Contract Address
-export const CULTURE_DROPS_CONTRACT_ADDRESS = '0x5Dc29E2Fd687547048D9A5466513f8269e85b777';
+export const BASESCAPE_CONTRACT_ADDRESS = '0x5Dc29E2Fd687547048D9A5466513f8269e85b777'; // BaseScape NFT contract on Base Sepolia
 
 // Base Sepolia Network Configuration
 export const BASE_SEPOLIA_CONFIG = {
@@ -21,8 +21,8 @@ export const BASE_SEPOLIA_CONFIG = {
     },
 };
 
-// Contract ABI (minimal for the functions we need)
-export const CULTURE_DROPS_ABI = [
+// BaseScape NFT Contract ABI (minimal for the functions we need)
+export const BASESCAPE_NFT_ABI = [
     // Mint function
     'function mintDrop(string memory title, string memory caption, string memory city, string memory country, string memory blobId, string memory imageUrl, string memory dropId, string memory longitude, string memory latitude, uint256 hypeScore, uint256 voteCount, uint256 commentCount, uint256 basePrice, address creatorWallet) external',
 
@@ -61,13 +61,13 @@ export function getBaseSepoliaProvider(): ethers.JsonRpcProvider {
 }
 
 /**
- * Get contract instance
+ * Get BaseScape NFT contract instance
  */
-export function getCultureDropsContract(signer?: ethers.Signer): ethers.Contract {
+export function getBaseScapeContract(signer?: ethers.Signer): ethers.Contract {
     const provider = signer ? signer.provider! : getBaseSepoliaProvider();
     return new ethers.Contract(
-        CULTURE_DROPS_CONTRACT_ADDRESS,
-        CULTURE_DROPS_ABI,
+        BASESCAPE_CONTRACT_ADDRESS,
+        BASESCAPE_NFT_ABI,
         signer || provider
     );
 }
@@ -94,7 +94,7 @@ export async function mintDropNFT(
         creatorWallet: string;
     }
 ): Promise<{ tx: ethers.ContractTransactionResponse; tokenId: number }> {
-    const contract = getCultureDropsContract(signer);
+    const contract = getBaseScapeContract(signer);
 
     // Convert ETH to wei
     const basePriceInWei = ethers.parseEther(dropData.basePrice.toString());
@@ -131,7 +131,7 @@ export async function buyNFT(
     tokenId: number,
     priceInETH: number
 ): Promise<ethers.ContractTransactionResponse> {
-    const contract = getCultureDropsContract(signer);
+    const contract = getBaseScapeContract(signer);
     const priceInWei = ethers.parseEther(priceInETH.toString());
 
     return await contract.buyNFT(tokenId, { value: priceInWei });
@@ -145,7 +145,7 @@ export async function listNFTForSale(
     tokenId: number,
     basePriceInETH: number
 ): Promise<ethers.ContractTransactionResponse> {
-    const contract = getCultureDropsContract(signer);
+    const contract = getBaseScapeContract(signer);
     const basePriceInWei = ethers.parseEther(basePriceInETH.toString());
 
     return await contract.listForSale(tokenId, basePriceInWei);
@@ -158,7 +158,7 @@ export async function delistNFT(
     signer: ethers.Signer,
     tokenId: number
 ): Promise<ethers.ContractTransactionResponse> {
-    const contract = getCultureDropsContract(signer);
+    const contract = getBaseScapeContract(signer);
     return await contract.delist(tokenId);
 }
 
@@ -170,7 +170,7 @@ export async function evolveNFT(
     tokenId: number,
     newHypeScore: number
 ): Promise<ethers.ContractTransactionResponse> {
-    const contract = getCultureDropsContract(signer);
+    const contract = getBaseScapeContract(signer);
     return await contract.evolve(tokenId, Math.floor(newHypeScore));
 }
 
@@ -198,7 +198,7 @@ export async function getNFTData(tokenId: number): Promise<{
     forSale: boolean;
     hypeMultiplier: bigint;
 }> {
-    const contract = getCultureDropsContract();
+    const contract = getBaseScapeContract();
     return await contract.getCultureDropData(tokenId);
 }
 
@@ -206,7 +206,7 @@ export async function getNFTData(tokenId: number): Promise<{
  * Get total supply
  */
 export async function getTotalSupply(): Promise<number> {
-    const contract = getCultureDropsContract();
+    const contract = getBaseScapeContract();
     const supply = await contract.totalSupply();
     return Number(supply);
 }
@@ -215,7 +215,7 @@ export async function getTotalSupply(): Promise<number> {
  * Get NFT owner
  */
 export async function getNFTOwner(tokenId: number): Promise<string> {
-    const contract = getCultureDropsContract();
+    const contract = getBaseScapeContract();
     return await contract.ownerOf(tokenId);
 }
 
@@ -223,7 +223,7 @@ export async function getNFTOwner(tokenId: number): Promise<string> {
  * Calculate evolution level
  */
 export async function calculateEvolutionLevel(hypeScore: number): Promise<number> {
-    const contract = getCultureDropsContract();
+    const contract = getBaseScapeContract();
     const level = await contract.calculateEvolutionLevel(Math.floor(hypeScore));
     return Number(level);
 }
@@ -232,7 +232,7 @@ export async function calculateEvolutionLevel(hypeScore: number): Promise<number
  * Calculate hype multiplier
  */
 export async function calculateHypeMultiplier(hypeScore: number): Promise<number> {
-    const contract = getCultureDropsContract();
+    const contract = getBaseScapeContract();
     const multiplier = await contract.calculateHypeMultiplier(Math.floor(hypeScore));
     return Number(multiplier);
 }
@@ -241,7 +241,7 @@ export async function calculateHypeMultiplier(hypeScore: number): Promise<number
  * Extract token ID from transaction receipt
  */
 async function extractTokenIdFromReceipt(receipt: ethers.TransactionReceipt): Promise<number> {
-    const contract = getCultureDropsContract();
+    const contract = getBaseScapeContract();
 
     // Look for DropNFTMinted event
     for (const log of receipt.logs) {

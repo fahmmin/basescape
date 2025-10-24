@@ -17,7 +17,7 @@ import {
     buyNFT,
     calculateCurrentPrice,
     weiToETH,
-    CULTURE_DROPS_CONTRACT_ADDRESS,
+    BASESCAPE_CONTRACT_ADDRESS,
     getBaseSepoliaProvider
 } from '@/lib/baseContract';
 
@@ -192,7 +192,7 @@ export default function DropDetailPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     tokenId,
-                    contractAddress: CULTURE_DROPS_CONTRACT_ADDRESS,
+                    contractAddress: BASESCAPE_CONTRACT_ADDRESS,
                     txHash: tx.hash,
                     wallet: account,
                 }),
@@ -231,7 +231,7 @@ export default function DropDetailPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     tokenId: parseInt(manualNftId.trim()),
-                    contractAddress: CULTURE_DROPS_CONTRACT_ADDRESS,
+                    contractAddress: BASESCAPE_CONTRACT_ADDRESS,
                     txHash: 'MANUAL_ENTRY',
                     wallet: account,
                 }),
@@ -463,7 +463,7 @@ export default function DropDetailPage() {
                                         {isMinting
                                             ? 'MINTING NFT...'
                                             : account
-                                                ? 'MINT AS NFT ON BASE'
+                                                ? 'MINT AS NFT ON BASE BLOCKCHAIN'
                                                 : 'CONNECT WALLET TO MINT NFT'}
                                     </span>
                                 </button>

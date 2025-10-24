@@ -63,11 +63,31 @@ export default function Home() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="font-mondwest text-4xl md:text-6xl mb-4 text-center">
-            Discover Culture Drops
+            Discover BaseScape
           </h1>
           <p className="text-center text-[#F7F7F7]/70 max-w-2xl mx-auto mb-6">
-            Explore amazing places shared by the global community. Every image is permanently stored on Walrus blockchain, every vote is secured by Sui signatures, and every story connects us across the world and sells through NFTs.
+            Explore amazing places shared by the global community. Built on Base blockchain, every image is permanently stored on Walrus, every vote is secured by Ethereum signatures, and every story connects us across the world through NFTs.
           </p>
+
+          {/* Base Showcase */}
+          <div className="flex justify-center mb-6">
+            <div className="flex items-center gap-4 px-6 py-3 bg-gradient-to-r from-[#97F0E5]/10 to-[#C684F6]/10 border border-[#97F0E5]/30 rounded-lg">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-[#97F0E5] rounded-full animate-pulse"></div>
+                <span className="text-sm font-neuebit text-[#97F0E5]">POWERED BY BASE</span>
+              </div>
+              <div className="w-px h-4 bg-[#F7F7F7]/30"></div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-[#C684F6] rounded-full animate-pulse"></div>
+                <span className="text-sm font-neuebit text-[#C684F6]">ETHEREUM L2</span>
+              </div>
+              <div className="w-px h-4 bg-[#F7F7F7]/30"></div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-[#97F0E5] rounded-full animate-pulse"></div>
+                <span className="text-sm font-neuebit text-[#97F0E5]">NFT MARKETPLACE</span>
+              </div>
+            </div>
+          </div>
 
           {/* Search Bar */}
           <div className="flex justify-center mb-6">

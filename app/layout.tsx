@@ -5,8 +5,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "Culture Drops - Share & Discover Places",
-  description: "Share your favorite places with the world. Culture Drops stores images on Walrus and connects communities through place-based stories.",
+  title: "BaseScape - Built on Base Blockchain",
+  description: "Share your favorite places with the world. BaseScape is built on Base blockchain, storing images on Walrus and connecting communities through place-based stories.",
 };
 
 export default function RootLayout({

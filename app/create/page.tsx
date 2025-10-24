@@ -118,11 +118,29 @@ export default function CreatePage() {
 
             <main className="w-full max-w-2xl px-4 py-8 mt-8">
                 <h1 className="font-mondwest text-4xl md:text-5xl mb-4 text-center">
-                    Create a Culture Drop
+                    Create a BaseScape Drop
                 </h1>
                 <p className="text-center text-[#F7F7F7]/70 mb-8">
-                    Share your favorite place with the world. Images are permanently stored on Walrus blockchain, secured by Sui signatures, and may earn you NFT rewards.
+                    Share your favorite place with the world. Built on Base blockchain, images are permanently stored on Walrus, secured by Ethereum signatures, and can be minted as NFTs.
                 </p>
+
+                {/* Base Features Showcase */}
+                <div className="flex justify-center mb-8">
+                    <div className="flex items-center gap-6 px-6 py-3 bg-gradient-to-r from-[#97F0E5]/10 to-[#C684F6]/10 border border-[#97F0E5]/30 rounded-lg">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-[#97F0E5] rounded-full"></div>
+                            <span className="text-xs font-neuebit text-[#97F0E5]">BASE BLOCKCHAIN</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-[#C684F6] rounded-full"></div>
+                            <span className="text-xs font-neuebit text-[#C684F6]">NFT MINTING</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-[#97F0E5] rounded-full"></div>
+                            <span className="text-xs font-neuebit text-[#97F0E5]">ETHEREUM L2</span>
+                        </div>
+                    </div>
+                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6 bg-[#0C0F1D] border-2 border-[#97F0E5]/30 rounded-lg p-6">
                     {/* Image Upload */}

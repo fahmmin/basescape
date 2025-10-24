@@ -70,7 +70,7 @@ export function NFTBadge({ nftData }: NFTBadgeProps) {
                             #{tokenId}
                         </p>
                         <a
-                            href={getBaseExplorerUrl(`0x5Dc29E2Fd687547048D9A5466513f8269e85b777`)}
+                            href={getBaseExplorerUrl(`0x5Dc29E2Fd687547048D9A5466513f8269e85b777`)} // BaseScape contract
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-2 hover:bg-[#C684F6]/20 rounded-md transition-colors"
@@ -146,8 +146,8 @@ export function NFTBadge({ nftData }: NFTBadgeProps) {
                 {/* Info */}
                 <div className="p-3 bg-[#C684F6]/10 rounded-md">
                     <p className="text-xs text-[#F7F7F7]/70 leading-relaxed">
-                        ✨ This drop is now a permanent NFT on the Base blockchain!
-                        You can view it in your wallet, transfer it, or trade it.
+                        ✨ This drop is now a permanent NFT on Base blockchain!
+                        Built on Ethereum L2, you can view it in your wallet, transfer it, or trade it.
                     </p>
                 </div>
             </div>

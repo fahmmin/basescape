@@ -17,7 +17,6 @@ export function Navigation() {
         { href: '/map', label: 'Map', icon: Map },
         { href: '/top', label: 'Top', icon: Trophy },
         { href: '/articles', label: 'Articles', icon: Globe },
-        { href: '/play', label: 'Play', icon: Gamepad2 },
         { href: '/leaderboard', label: 'Scores', icon: Trophy },
         { href: '/friends', label: 'Friends', icon: Users },
         { href: '/circles', label: 'Circles', icon: Users },

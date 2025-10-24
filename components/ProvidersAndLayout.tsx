@@ -22,11 +22,14 @@ export function ProvidersAndLayout(props: ProvidersAndLayoutProps) {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full mb-4">
                 <div className="flex flex-row gap-1 items-center justify-center sm:justify-start">
                   <span className={`font-neuebit text-2xl sm:text-3xl`}>
-                    CULTURE
+                    BASE
                   </span>
                   <span className={`font-neuebit text-2xl sm:text-3xl font-bold text-[#C684F6]`}>
-                    DROPS
+                    SCAPE
                   </span>
+                  <div className="ml-2 px-2 py-1 bg-[#97F0E5]/20 border border-[#97F0E5] rounded-md">
+                    <span className="text-xs font-neuebit text-[#97F0E5]">BUILT ON BASE</span>
+                  </div>
                 </div>
               </div>
               <Navigation />
